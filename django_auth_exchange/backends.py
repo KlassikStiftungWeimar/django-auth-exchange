@@ -1,5 +1,7 @@
 from django.contrib.auth import get_user_model
 import exchangelib as el
+import logging
+logger = logging.getLogger("exchange_auth")
 from .settings import get_setting
 try:
     from django_auth_exchange_organizations.models import DomainOrganization
@@ -38,6 +40,7 @@ class ExchangeAuthBackend:
         username = username.lower()
         allowed_formats = get_setting('AUTH_EXCHANGE_ALLOWED_FORMATS')
         if '\\' in username:
+            logger.debug("assume dom\\user")
             # assume dom\user
             if 'netbios' not in allowed_formats: return None
             netbios, user = username.rsplit('\\', 1)
@@ -47,14 +50,18 @@ class ExchangeAuthBackend:
                 dom = netbios
             smtp = '{0}@{1}'.format(user, dom)
             c_username = username
+            logger.debug(f"username: {username}")
         elif '@' in username:
             # assume user@dom
+            logger.debug("assume dom@user")
             if 'email' not in allowed_formats: return None
             user, dom = username.rsplit('@', 1)
             smtp = username
             c_username = username
+            logger.debug(f"username: {username}")
         else:
             # assume username only
+            logger.debug("assume username only")
             if 'username' not in allowed_formats: return None
             dom = get_setting('AUTH_EXCHANGE_DEFAULT_DOMAIN')
             user = username
@@ -63,9 +70,12 @@ class ExchangeAuthBackend:
                 c_username = "{0}\\{1}".format(dom, user)
             else:
                 c_username = "{0}@{1}".format(user, dom)
-
+            logger.debug(f"username: {c_username}")
         # check if domain is allowed
         domains = get_setting('AUTH_EXCHANGE_DOMAIN_SERVERS')
+        logger.debug(f"dom: {dom}")
+        logger.debug(f"domains: {domains}")
+        logger.debug(f"smtp: {smtp}")
         if dom not in domains: return None
 
         # authenticate against Exchange server
