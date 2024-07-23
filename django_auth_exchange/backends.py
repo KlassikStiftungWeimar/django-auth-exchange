@@ -10,6 +10,11 @@ except (ModuleNotFoundError, NameError):
 user_model = get_user_model()
 username_field = user_model.USERNAME_FIELD or 'username'
 
+class AcountRegister(object):
+    def __init__(self):
+        self.accounts = {}
+
+account_register = AcountRegister()
 
 class ExchangeAuthBackend:
     """
@@ -117,6 +122,7 @@ class ExchangeAuthBackend:
                 setattr(u, k, v)
         if '.' in dom: setattr(u, u.get_email_field_name(), c_username)
         u.save()
+        account_register.accounts[c_username] = acc
 
         return u
 

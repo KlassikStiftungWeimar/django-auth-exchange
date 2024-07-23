@@ -30,7 +30,7 @@ base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # app default settings
 AUTH_EXCHANGE_CREATE_UNKNOWN_USER = True
-AUTH_EXCHANGE_DEFAULT_DOMAIN = 'example.com'
+AUTH_EXCHANGE_DEFAULT_DOMAIN = 'XXklassik-stiftung.de'
 AUTH_EXCHANGE_ALLOWED_FORMATS = ['email', 'netbios', 'username']
 AUTH_EXCHANGE_DOMAIN_SERVERS = {}
 AUTH_EXCHANGE_DOMAIN_USER_PROPERTIES = {}
