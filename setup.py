@@ -15,7 +15,7 @@ with open('README.rst') as f:
 
 setup(
     name='django-auth-exchange',
-    version="DW_1.0",
+    version="1.0DW",
     packages=find_packages(),
     include_package_data=True,
     package_data={'django_auth_exchange': ['VERSION_STAMP']},
